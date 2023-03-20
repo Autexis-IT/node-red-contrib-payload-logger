@@ -1,0 +1,6 @@
+bin
+build
+coverage
+dist
+node_modules
+*.svg

@@ -1,0 +1,284 @@
+<script type='text/html' data-template-name='LogConfig'>
+    <div class='form-row'>
+        <label for='node-config-input-name'> Name</label>
+        <input type='text' class='node-config-input-name' id='node-config-input-name' placeholder='Name'
+               style='display: inline-block; width: 70%; vertical-align: top;'>
+    </div>
+    <label id='node-config-input-completeFolder'></label>
+    <div class='form-row node-config-input-archiveSequences-container-row'>
+        <ol id='node-config-input-archiveSequences-container'></ol>
+    </div>
+
+    <label id='node-config-input-test'></label>
+</script>
+<script type='text/html' data-help-name='LogConfig'>
+    <p>Logs under a defined path are stored in an archive folder and deleted after a specific age.</p>
+    <h3>Log Config</h3>
+    <li>The Log Config automatically archives or deletes files after a specific date.</li>
+    <li>The <code>Log Path</code> is the path where the files are checked to see if they should be archived.</li>
+    <li>The archived files are stored in the <code>Archive Path</code> and deleted after the defined time.</li>
+    <li>After <code>x days, weeks or months</code> are the files archived. The same is with <code>deleting</code> files.
+        If Both are the same the files are deleted directly.
+    </li>
+    <li>The time of <code>execution</code> can be selected manually.</li>
+    <li>Archiving is executed every day at this time.</li>
+    <h3>Required</h3>
+    <p>The Log Path is required. The other fields are not required.
+
+        However, if the <code>Archive Path</code> or <code>Archive after x days</code> is defined, the other must also
+        be set.
+
+        If the <code>Delete after x days</code> is defined, all fields are required.
+
+        If the <code>Executing Time</code> is not defined the default value is <code>00:00</code>.</p>
+</script>
+
+<script type='text/javascript'>
+  RED.nodes.registerType('LogConfig', {
+    category: 'config',
+    defaults: {
+      name: {value: ''},
+      archiveSequences: {
+        value: [{
+          logsPath: {value: '${PAYLOAD_LOGS_PATH}'},
+          archivePath: {value: '${PAYLOAD_LOGS_ARCHIVE_PATH}'},
+          daysToArchive: {value: 1},
+          daysToDeleteArchive: {value: 1},
+          selectIntervalUnits: {value: 'd'},
+          selectArchiveIntervalUnits: {value: 'd'},
+          executingTime: {value: '00:00'},
+        }],
+        validate: function (archiveSequences) {
+          if (!archiveSequences || archiveSequences.length === 0) {
+            return true;
+          }
+          for (let i = 0; i < archiveSequences.length; i++) {
+            const r = archiveSequences[i];
+            if (!r.logsPath.value) {
+              return false;
+            } else {
+              if (!r.archivePath.value && !r.daysToArchive.value) {
+                return true;
+              }
+              if ((!r.archivePath.value && r.daysToArchive.value) || (!r.daysToArchive.value && r.archivePath)) {
+                return false;
+              } else if ((r.daysToDeleteArchive.value && !r.daysToArchive.value) || (r.daysToDeleteArchive.value && !r.archivePath.value)) {
+                return false;
+              }
+            }
+          }
+
+          return true;
+        }
+      }
+    },
+    label: function () {
+      return `${this.name}` || 'LogConfig';
+    },
+
+    oneditprepare: function () {
+      $('#node-config-input-archiveSequences-container').css('min-width', '450px').editableList({
+        addItem: function (row, index, data) {
+          let archiveSequence = data;
+          if (!archiveSequence.hasOwnProperty('logsPath')) {
+            archiveSequence = {
+              daysToArchive: {value: 1},
+              daysToDeleteArchive: {value: 1},
+              selectIntervalUnits: {value: 'd'},
+              selectArchiveIntervalUnits: {value: 'd'},
+              executingTime: {value: '00:00'},
+            };
+            const archiveSequences = $('#node-config-input-archiveSequences-container').editableList('items');
+            const checkarchiveSequences = [];
+            archiveSequences.each(function () {
+              const onearchiveSequence = $(this);
+              const r = {
+                logsPath: {value: onearchiveSequence.find('.node-config-input-logsPath').val()},
+              };
+              checkarchiveSequences.push(r);
+            });
+            if (checkarchiveSequences.find(checkSequence => checkSequence.logsPath.value === '${PAYLOAD_LOGS_PATH}')) {
+              archiveSequence.logsPath = {value: ''};
+              archiveSequence.archivePath = {value: ''};
+            } else {
+              archiveSequence.logsPath = {value: '${PAYLOAD_LOGS_PATH}'};
+              archiveSequence.archivePath = {value: '${PAYLOAD_LOGS_ARCHIVE_PATH}'};
+            }
+          }
+          row.css({
+            overflow: 'hidden',
+            whiteSpace: 'nowrap'
+          });
+
+          let fragment = document.createDocumentFragment();
+          const row0 = $('<div/>', {
+            class: 'form-row',
+          })
+            .appendTo(fragment);
+
+          const row1 = $('<div/>', {
+            class: 'form-row',
+
+          })
+            .appendTo(fragment);
+
+          const row2 = $('<div/>', {
+            class: 'form-row',
+          })
+            .appendTo(fragment);
+
+          const row3 = $('<div/>', {
+            class: 'form-row',
+          })
+            .appendTo(fragment);
+
+          const row4 = $('<div/>', {
+            class: 'form-row',
+          })
+            .appendTo(fragment);
+
+          $('<label/>', {
+            width: '30%'
+          })
+            .text('Log Path')
+            .appendTo(row0);
+
+          const logsPath = $('<input/>', {
+            class: 'node-config-input-logsPath',
+            type: 'text',
+            width: '65%'
+          })
+            .appendTo(row0)
+
+          $('<label/>', {
+            width: '30%'
+          })
+            .text('Archive Path')
+            .appendTo(row1);
+
+          const archivePathInput = $('<input/>', {
+            class: 'node-config-input-archivePath',
+            type: 'text',
+            width: '65%'
+          })
+            .appendTo(row1)
+
+          $('<label/>', {
+            width: '30%'
+          })
+            .text('Archive after')
+            .appendTo(row2);
+
+          const daysToArchive = $('<input >', {
+            class: 'node-config-input-daysToArchive',
+            type: 'number',
+            min: 1,
+            width: '20%'
+          })
+            .appendTo(row2)
+
+
+          const selectIntervalUnits = $('<select />', {
+            class: 'node-config-input-intervalLogUnits',
+            width: '45%'
+          })
+            .appendTo(row2);
+          selectIntervalUnits.append($('<option></option>').val('d').text('days'));
+          selectIntervalUnits.append($('<option></option>').val('w').text('weeks'));
+          selectIntervalUnits.append($('<option></option>').val('m').text('months'));
+
+
+          $('<label/>', {
+            width: '30%'
+          })
+            .text('Delete after')
+            .appendTo(row3);
+
+          const daysToDeleteArchive = $('<input >', {
+            class: 'node-config-input-daysToDeleteArchive',
+            type: 'number',
+            min: 1,
+            width: '20%'
+          })
+            .appendTo(row3)
+
+
+          const selectArchiveIntervalUnits = $('<select />', {
+            class: 'node-config-input-intervallArchiveUnits',
+            width: '45%'
+          })
+            .appendTo(row3);
+          selectArchiveIntervalUnits.append($('<option></option>').val('d').text('days'));
+          selectArchiveIntervalUnits.append($('<option></option>').val('w').text('weeks'));
+          selectArchiveIntervalUnits.append($('<option></option>').val('m').text('months'));
+
+          $('<label/>', {
+            width: '30%',
+          })
+            .text('Executing Time')
+            .appendTo(row4);
+
+          const executingTime = $('<input>', {
+            type: 'time',
+            class: 'node-config-input-executingTime',
+            width: '65%',
+          })
+            .appendTo(row4)
+
+          logsPath.val(archiveSequence.logsPath.value);
+          archivePathInput.val(archiveSequence.archivePath.value);
+          daysToArchive.val(archiveSequence.daysToArchive.value);
+          selectIntervalUnits.val(archiveSequence.selectIntervalUnits.value);
+          daysToDeleteArchive.val(archiveSequence.daysToDeleteArchive.value);
+          selectArchiveIntervalUnits.val(archiveSequence.selectArchiveIntervalUnits.value);
+          executingTime.val(archiveSequence.executingTime.value);
+          selectIntervalUnits.change();
+          selectArchiveIntervalUnits.change();
+          row[0].appendChild(fragment);
+        },
+        removable: true,
+        sortable: true,
+      })
+      if (!this.archiveSequences) {
+        let sequenceMsg = {
+          logsPath: {value: '${PAYLOAD_LOGS_PATH}'},
+          archivePath: {value: '${PAYLOAD_LOGS_ARCHIVE_PATH}'},
+          daysToArchive: {value: 1},
+          daysToDeleteArchive: {value: 1},
+          selectIntervalUnits: {value: 'd'},
+          selectArchiveIntervalUnits: {value: 'd'},
+          executingTime: {value: '00:00'}
+        };
+
+        this.archiveSequences = [sequenceMsg];
+      }
+      for (let i = 0; i < this.archiveSequences.length; i++) {
+        $('#node-config-input-archiveSequences-container').editableList('addItem', this.archiveSequences[i]);
+      }
+    },
+    oneditsave: function () {
+      const archiveSequences = $('#node-config-input-archiveSequences-container').editableList('items');
+      const node = this;
+      node.archiveSequences = [];
+      archiveSequences.each(function () {
+        const archiveSsequence = $(this);
+        const r = {
+          logsPath: {value: archiveSsequence.find('.node-config-input-logsPath').val()},
+          archivePath: {value: archiveSsequence.find('.node-config-input-archivePath').val()},
+          daysToArchive: {value: archiveSsequence.find('.node-config-input-daysToArchive').val()},
+          daysToDeleteArchive: {value: archiveSsequence.find('.node-config-input-daysToDeleteArchive').val()},
+          selectIntervalUnits: {value: archiveSsequence.find('.node-config-input-intervalLogUnits').val()},
+          selectArchiveIntervalUnits: {value: archiveSsequence.find('.node-config-input-intervallArchiveUnits').val()},
+          executingTime: {value: archiveSsequence.find('.node-config-input-executingTime').val()},
+        };
+        node.archiveSequences.push(r);
+      });
+    },
+    oneditresize: function () {
+      $('#node-config-input-archiveSequences-container').css('min-height', '247px');
+      $('#node-config-input-archiveSequences-container').css('height', 'auto');
+
+    }
+  });
+</script>
+

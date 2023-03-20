@@ -1,0 +1,301 @@
+[
+  {
+    "id": "c5b9e4c451c82c69",
+    "type": "tab",
+    "label": "example Flow",
+    "disabled": false,
+    "info": "",
+    "env": []
+  },
+  {
+    "id": "a648df56fb6e6350",
+    "type": "inject",
+    "z": "c5b9e4c451c82c69",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{\"name\":\"John\",\"age\":22,\"gender\":\"male\"}",
+    "payloadType": "json",
+    "x": 250,
+    "y": 100,
+    "wires": [
+      [
+        "f699d4d45709452e"
+      ]
+    ]
+  },
+  {
+    "id": "f699d4d45709452e",
+    "type": "http request",
+    "z": "c5b9e4c451c82c69",
+    "name": "",
+    "method": "GET",
+    "ret": "obj",
+    "paytoqs": "ignore",
+    "url": "localhost:8000/employees/John",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 450,
+    "y": 100,
+    "wires": [
+      [
+        "c64b6fbaa3822e90"
+      ]
+    ]
+  },
+  {
+    "id": "c64b6fbaa3822e90",
+    "type": "Logger",
+    "z": "c5b9e4c451c82c69",
+    "name": "",
+    "logConfig": "66b4aa1a98a31e75",
+    "debugWindow": true,
+    "console": false,
+    "logType": "",
+    "logContent": "payload",
+    "folder": "employees/request",
+    "prefix": "employees",
+    "identifier": "payload.name",
+    "extension": "",
+    "extensionHidden": "json",
+    "x": 640,
+    "y": 100,
+    "wires": [
+      [
+        "2b42587345fd9f13"
+      ]
+    ]
+  },
+  {
+    "id": "2b42587345fd9f13",
+    "type": "function",
+    "z": "c5b9e4c451c82c69",
+    "name": "Logic Function",
+    "func": "const user = msg.payload;\nmsg.url = `http://localhost:8000/workhours/${user.id}`\nmsg.payload ={\n    userid: user.id,\n    hours: 10,\n    project: \"testProject\",\n    description: \"description\",\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 840,
+    "y": 100,
+    "wires": [
+      [
+        "280a88cbaab8d40f"
+      ]
+    ]
+  },
+  {
+    "id": "280a88cbaab8d40f",
+    "type": "http request",
+    "z": "c5b9e4c451c82c69",
+    "name": "",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 1050,
+    "y": 100,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "238793311dabfdd6",
+    "type": "http in",
+    "z": "c5b9e4c451c82c69",
+    "name": "",
+    "url": "employees/:name",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 490,
+    "y": 180,
+    "wires": [
+      [
+        "9a5d3e3f399a493d",
+        "43fd647a0087e1a8"
+      ]
+    ]
+  },
+  {
+    "id": "c0f311bbfc8d346a",
+    "type": "http response",
+    "z": "c5b9e4c451c82c69",
+    "name": "",
+    "statusCode": "",
+    "headers": {
+      "content-type": "application/json"
+    },
+    "x": 910,
+    "y": 180,
+    "wires": []
+  },
+  {
+    "id": "9a5d3e3f399a493d",
+    "type": "function",
+    "z": "c5b9e4c451c82c69",
+    "name": "search employee",
+    "func": "const name = msg.req.params.name;\nlet object = {\n    \"name\": \"\",\n    \"id\": null,\n    \"age\": null,\n    \"gender\": \"\"\n}\nif (name) {\n    msg.statusCode = 200;\n    switch (name) {\n        case 'John':\n            object.name = \"John\";\n            object.id = 1,\n            object.age = 22;\n            object.gender = \"male\"\n            break;\n        case 'Conrad':\n            object.name = \"Conrad \";\n            object.id = 2,\n            object.age = 53;\n            object.gender = \"male\"\n            break;\n        case 'Clara':\n            object.name = \"Clara \";\n            object.id = 3,\n            object.age = 29;\n            object.gender = \"female\"\n            break;\n        default:\n            object = null;\n    }\n    msg.payload = object;\n}\nelse {\n    msg.statusCode = 400;\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 730,
+    "y": 180,
+    "wires": [
+      [
+        "b2044a38a10f364f",
+        "c0f311bbfc8d346a"
+      ]
+    ]
+  },
+  {
+    "id": "0109f6be4d4713ef",
+    "type": "http in",
+    "z": "c5b9e4c451c82c69",
+    "name": "",
+    "url": "workhours/:id",
+    "method": "post",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 480,
+    "y": 280,
+    "wires": [
+      [
+        "a8f636c5fa9af08b"
+      ]
+    ]
+  },
+  {
+    "id": "a8f636c5fa9af08b",
+    "type": "Logger",
+    "z": "c5b9e4c451c82c69",
+    "name": "",
+    "logConfig": "66b4aa1a98a31e75",
+    "debugWindow": false,
+    "console": true,
+    "logType": "",
+    "logContent": "payload",
+    "folder": "workhours/in",
+    "prefix": "workhours",
+    "identifier": "",
+    "extension": "",
+    "extensionHidden": "json",
+    "x": 700,
+    "y": 280,
+    "wires": [
+      [
+        "204eb977b8a173fd"
+      ]
+    ]
+  },
+  {
+    "id": "204eb977b8a173fd",
+    "type": "http response",
+    "z": "c5b9e4c451c82c69",
+    "name": "",
+    "statusCode": "200",
+    "headers": {
+      "content-type": "application/json"
+    },
+    "x": 920,
+    "y": 280,
+    "wires": []
+  },
+  {
+    "id": "43fd647a0087e1a8",
+    "type": "Logger",
+    "z": "c5b9e4c451c82c69",
+    "name": "",
+    "logConfig": "66b4aa1a98a31e75",
+    "debugWindow": false,
+    "console": false,
+    "logType": "req.params.name",
+    "logContent": "jsonata",
+    "folder": "employees/in",
+    "prefix": "employees",
+    "identifier": "",
+    "extension": "",
+    "extensionHidden": "json",
+    "x": 700,
+    "y": 220,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "b2044a38a10f364f",
+    "type": "Logger",
+    "z": "c5b9e4c451c82c69",
+    "name": "",
+    "logConfig": "66b4aa1a98a31e75",
+    "debugWindow": false,
+    "console": false,
+    "logType": "",
+    "logContent": "payload",
+    "folder": "employees/out",
+    "prefix": "employees",
+    "identifier": "(payload.name ? payload.name : payload) & \"_\" & statusCode",
+    "extension": "",
+    "extensionHidden": "json",
+    "x": 920,
+    "y": 220,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "66b4aa1a98a31e75",
+    "type": "LogConfig",
+    "name": "",
+    "archiveSequences": [
+      {
+        "logsPath": {
+          "value": "${PAYLOAD_LOGS_PATH}"
+        },
+        "archivePath": {
+          "value": "${PAYLOAD_LOGS_ARCHIVE_PATH}"
+        },
+        "daysToArchive": {
+          "value": "5"
+        },
+        "daysToDeleteArchive": {
+          "value": "1"
+        },
+        "selectIntervalUnits": {
+          "value": "d"
+        },
+        "selectArchiveIntervalUnits": {
+          "value": "w"
+        },
+        "executingTime": {
+          "value": "02:00"
+        }
+      }
+    ]
+  }
+]
