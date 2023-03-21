@@ -1,0 +1,30 @@
+{
+  "name": "@autexis/node-red-payload-logger",
+  "version": "1.0.0",
+  "description": "Node-RED Contribution to log data",
+  "main": "index.js",
+  "repository": "https://github.com/Autexis-IT/node-red-contrib-payload-logger",
+  "author": "Autexis IT <info@autexis.com>",
+  "license": "MIT",
+  "private": false,
+  "node-red": {
+    "nodes": {
+      "Logger": "nodes/logger/logger.js",
+      "Config": "nodes/config/config.js"
+    }
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/eslint-parser": "^7.19.1",
+    "eslint": "8.34.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.10",
+    "date-fns": "^2.29.3",
+    "fs-extra": "^11.1.0",
+    "lodash": "^4.17.21",
+    "node-cron": "^3.0.2"
+  }
+}

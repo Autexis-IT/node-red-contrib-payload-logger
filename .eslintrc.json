@@ -1,0 +1,42 @@
+{
+  "root": true,
+  "extends": [
+    "airbnb-base"
+  ],
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "requireConfigFile": false,
+    "babelOptions": {
+    }
+  },
+  "rules": {
+    "import/prefer-default-export": "off",
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "only-multiline",
+        "exports": "only-multiline",
+        "functions": "never"
+      }
+    ],
+    "object-curly-newline": [
+      "error",
+      {
+        "ObjectPattern": {
+          "multiline": true,
+          "minProperties": 8
+        }
+      }
+    ],
+    "max-len": [
+      2,
+      {
+        "code": 120,
+        "tabWidth": 2,
+        "ignoreUrls": true
+      }
+    ]
+  }
+}
