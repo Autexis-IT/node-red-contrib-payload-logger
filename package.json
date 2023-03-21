@@ -1,5 +1,5 @@
 {
-  "name": "node-red-payload-logger",
+  "name": "@autexis/node-red-payload-logger",
   "version": "1.0.0",
   "description": "Node-RED Contribution to log data",
   "main": "index.js",
