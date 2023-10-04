@@ -1,165 +1,182 @@
 <script type='text/html' data-template-name='Logger'>
-    <!-- NAME -->
-    <div class='form-row'>
-        <label for='node-input-name'> Name</label>
-        <input type='text' id='node-input-name' placeholder='Name'
-               style='display: inline-block; width: 70%; vertical-align: top;'>
+  <!-- NAME -->
+  <div class='form-row'>
+    <label for='node-input-name'> Name</label>
+    <input type='text' id='node-input-name' placeholder='Name'
+           style='display: inline-block; width: 70%; vertical-align: top;'>
+  </div>
+  <!-- CONFIG -->
+  <div class='form-row' style='padding-bottom: 20px'>
+    <label for='node-input-logConfig'>Config</label>
+    <input type='text' id='node-input-logConfig' style='display: inline-block; width: 70%; vertical-align: top;'/>
+  </div>
+  <div class="form-row">
+    <label for="node-input-appendingToFile">Action</label>
+    <select type="text" id="node-input-appendingToFile" style="width: 250px;">
+      <option value=true>Append</option>
+      <option value=false>new File</option>
+    </select>
+    <div class="form-row" id="node-input-appendConfig">
+      <label>&nbsp;</label>
+      <input type="checkbox" id="node-input-appendNewline"
+             style="display: inline-block; width: auto; vertical-align: top;">
+      <label for="node-input-appendNewline" style="width: 70%;">Add newline (\n) to each payload?</label>
     </div>
-    <!-- CONFIG -->
-    <div class='form-row' style='padding-bottom: 20px'>
-        <label for='node-input-logConfig'>Config</label>
-        <input type='text' id='node-input-logConfig' style='display: inline-block; width: 70%; vertical-align: top;'/>
-    </div>
-    <!-- Where payload is logged -->
-    <div class='form-row'>
-        <label><i class='fa fa-random'></i> To</label>
-        <label for='node-input-debugWindow' style='width:70%'>
-            <input type='checkbox' id='node-input-debugWindow'
-                   style='display:inline-block; width:22px; vertical-align:top;'>debug window
-        </label>
-    </div>
-    <div class='form-row'>
-        <label for='node-input-console'> </label>
-        <label for='node-input-console' style='width:70%'>
-            <input type='checkbox' id='node-input-console'
-                   style='display:inline-block; width:22px; vertical-align:top;'>system console
-        </label>
-    </div>
+  </div>
 
-    <!-- Log-Type -->
-    <div class='form-row'>
-        <label for='node-input-logType' style='vertical-align: top;'>What should be logged</label>
-        <input type='text' id='node-input-logType' style='display: inline-block; width: 70%; vertical-align: top;'>
-        <input type='hidden' id='node-input-logContent'>
+  <!-- Where payload is logged -->
+  <div class='form-row'>
+    <label><i class='fa fa-random'></i> Write To</label>
+    <div style="display: inline-block; width: 22px; vertical-align: top;">
+      <input type='checkbox' id='node-input-debugWindow'>
     </div>
+    <label for='node-input-debugWindow' style='width: auto;'>debug window</label>
+  </div>
+  <div class='form-row'>
+    <label for='node-input-console'></label>
+    <div style="display: inline-block; width: 22px; vertical-align: top;">
+      <input type='checkbox' id='node-input-console'>
+    </div>
+    <label for='node-input-console' style='width: auto;'>system console</label>
+  </div>
 
-    <!-- Header -->
+
+  <!-- Log-Type -->
+  <div class='form-row'>
+    <label for='node-input-logType' style='vertical-align: top;'>What should be logged</label>
+    <input type='text' id='node-input-logType' style='display: inline-block; width: 70%; vertical-align: top;'>
+    <input type='hidden' id='node-input-logContent'>
+  </div>
+
+  <!-- Header -->
+  <div class='form-row'>
+    <label style='width: auto'>
+      <b>Path creation</b>
+    </label>
+  </div>
+  <!-- VARIABLE DECLARATION -->
+  <div id='node-input-variables-form'>
+    <!-- Folder -->
     <div class='form-row'>
-        <label style='width: auto'>
-            <b>Variable selection</b>
-        </label>
+      <label for='node-input-folder'>Folder</label>
+      <input type='text' id='node-input-folder' list='existing-folders'
+             style='display: inline-block; width: 70%; vertical-align: top;'>
+      <datalist id='existing-folders'></datalist>
     </div>
-    <!-- VARIABLE DECLARATION -->
-    <div id='node-input-variables-form'>
-        <!-- Folder -->
-        <div class='form-row'>
-            <label for='node-input-folder'>Folder</label>
-            <input type='text' id='node-input-folder' list='existing-folders'
-                   style='display: inline-block; width: 70%; vertical-align: top;'>
-            <datalist id='existing-folders'></datalist>
-        </div>
-        <!-- Prefix -->
-        <div class='form-row'>
-            <label for='node-input-prefix'>Prefix</label>
-            <input type='text' id='node-input-prefix' style='display: inline-block; width:  70%; vertical-align: top;'>
-        </div>
-        <!-- Identifier -->
-        <div class='form-row'>
-            <label for='node-input-identifier'>identifier </label>
-            <input type='text' id='node-input-identifier'
-                   style='display: inline-block; width:  70%; vertical-align: top;'>
-        </div>
-        <!-- Extension -->
-        <div class='form-row'>
-            <label for='node-input-extension'>File extension</label>
-            <input type='text' id='node-input-extension'
-                   style='display: inline-block; width:  70%; vertical-align: top;'>
-            <input type='hidden' id='node-input-extensionHidden'>
-        </div>
-        <div class='form-row'>
-            <label>Path:</label>
-            <label id='node-input-completeFolder'
-                   style='display: inline-block; width: auto; vertical-align: top;'></label>
-        </div>
+    <!-- Prefix -->
+    <div class='form-row'>
+      <label for='node-input-prefix'>Prefix</label>
+      <input type='text' id='node-input-prefix' style='display: inline-block; width:  70%; vertical-align: top;'>
     </div>
+    <!-- Identifier -->
+    <div class='form-row'>
+      <label for='node-input-identifier'>identifier </label>
+      <input type='text' id='node-input-identifier'
+             style='display: inline-block; width:  70%; vertical-align: top;'>
+    </div>
+    <!-- Extension -->
+    <div class='form-row'>
+      <label for='node-input-extension'>File extension</label>
+      <input type='text' id='node-input-extension'
+             style='display: inline-block; width:  70%; vertical-align: top;'>
+      <input type='hidden' id='node-input-extensionHidden'>
+    </div>
+    <div class='form-row'>
+      <label>Path:</label>
+      <label id='node-input-completeFolder'
+             style='display: inline-block; width: auto; vertical-align: top;'></label>
+    </div>
+  </div>
 
 
 </script>
 <script type='text/html' data-help-name='Logger'>
-    <p>Logs the input in a customized folder and archives Files after a specified time.</p>
+  <p>Logs the input in a customized folder and archives Files after a specified time.</p>
 
-    <h3>Inputs</h3>
-    <dl class='message-properties'>
-        <dt class='required'>payload<span class='property-type'>string/object</span></dt>
-        <dd>The payload is logged and stored in the file. Alternatively, the field <code>what should be logged</code>
-            can be used to define something other what should be logged.
-        </dd>
-        <dt class='optional'>folder<span class='property-type'>string</span></dt>
-        <a href='#folder-description'>
-            <dd>see folder</dd>
-        </a>
+  <h3>Inputs</h3>
+  <dl class='message-properties'>
+    <dt class='required'>payload<span class='property-type'>string/object</span></dt>
+    <dd>The payload is logged and stored in the file. Alternatively, the field <code>what should be logged</code>
+      can be used to define something other what should be logged.
+    </dd>
+    <dt class='optional'>folder<span class='property-type'>string</span></dt>
+    <a href='#folder-description'>
+      <dd>see folder</dd>
+    </a>
 
-        <dt class='optional'>prefix/type<span class='property-type'>string</span></dt>
-        <a href='#prefix-description'>
-            <dd>see prefix</dd>
-        </a>
+    <dt class='optional'>prefix/type<span class='property-type'>string</span></dt>
+    <a href='#prefix-description'>
+      <dd>see prefix</dd>
+    </a>
 
-        <dt class='optional'>identifier<span class='property-type'>string</span></dt>
-        <a href='#identifier-description'>
-            <dd>see identifier</dd>
-        </a>
+    <dt class='optional'>identifier<span class='property-type'>string</span></dt>
+    <a href='#identifier-description'>
+      <dd>see identifier</dd>
+    </a>
 
-        <dt class='optional'>extension<span class='property-type'>string</span></dt>
-        <dd>For extension with msg object the dropdown must be set to `string`.</dd>
+    <dt class='optional'>extension<span class='property-type'>string</span></dt>
+    <dd>For extension with msg object the dropdown must be set to `string`.</dd>
 
-    </dl>
-    <h3>Outputs</h3>
-    <ol class='node-ports'>
-        <li>Standard output
-            <dl class='message-properties'>
-                <dt>payload <span class='property-type'>array|object</span></dt>
-                <dd>Logged data is saved in <code>payload</code></dd>
-            </dl>
-        </li>
-    </ol>
-    <h3>Details</h3>
-    <h4>Config</h4>
-    <p>In the Config, logs are stored under a defined path in an archive folder and deleted when they reach a specific
-        age.</p>
-    <h4 class='fa fa-random'> Write To</h4>
-    <p>The logged input can be written into the <code>debug window</code> as well as into the <code>system
-        console</code>.</p>
-    <h4>What should be logged</h4>
-    <p>Either the <code>payload</code> can be logged, or it is defined via JSONata what is to be logged.</p>
-    <h4><b>Variable Selection</b></h4>
-    <p>The logged data is stored in a defined file in a specific folder. The structure looks like this:
-        <code>PAYLOAD_LOGS_PATH/{folder}/{prefix}_{identifier}_msgid.{extension}</code></p>
-    <h4>PAYLOAD_LOGS_PATH</h4>
-    <p>This is an Environment variable for the log folder. It can be defined in the <code>settings.js</code> file. If
-        this variable is undefined the default value ist <code>./logs`</code></p>
-    <h4 id='folder-description'>Folder</h4>
-    <p>The logged data is stored in this <code>folder</code>.</p>
-    <h4 id='prefix-description'>Prefix</h4>
-    <p>The <code>prefix</code> is the first part of the file name in which the logged data is stored.</p>
-    <h4 id='identifier-description'>Identifier</h4>
-    <p>The <code>identifier</code> is the second part of the file name. It is defined via JSONata. It does not have to
-        be
-        defined.</p>
-    <h4 id='extension-description'>File extension</h4>
-    <p>The file <code>extension</code> can be selected via a dropdown menu. You can choose between json, html, xml, txt
-        and a
-        self-selectable extension.</p>
+  </dl>
+  <h3>Outputs</h3>
+  <ol class='node-ports'>
+    <li>Standard output
+      <dl class='message-properties'>
+        <dt>payload <span class='property-type'>array|object</span></dt>
+        <dd>Logged data is saved in <code>payload</code></dd>
+      </dl>
+    </li>
+  </ol>
+  <h3>Details</h3>
+  <h4>Config</h4>
+  <p>In the Config, logs are stored under a defined path in an archive folder and deleted when they reach a specific
+    age.</p>
+  <h4 class='fa fa-random'> Write To</h4>
+  <p>The logged input can be written into the <code>debug window</code> as well as into the <code>system
+    console</code>.</p>
+  <h4>What should be logged</h4>
+  <p>Either the <code>payload</code> can be logged, or it is defined via JSONata what is to be logged.</p>
+  <h4><b>Variable Selection</b></h4>
+  <p>The logged data is stored in a defined file in a specific folder. The structure looks like this:
+    <code>PAYLOAD_LOGS_PATH/{folder}/{prefix}_{identifier}_msgid.{extension}</code></p>
+  <h4>PAYLOAD_LOGS_PATH</h4>
+  <p>This is an Environment variable for the log folder. It can be defined in the <code>settings.js</code> file. If
+    this variable is undefined the default value ist <code>./logs`</code></p>
+  <h4 id='folder-description'>Folder</h4>
+  <p>The logged data is stored in this <code>folder</code>.</p>
+  <h4 id='prefix-description'>Prefix</h4>
+  <p>The <code>prefix</code> is the first part of the file name in which the logged data is stored.</p>
+  <h4 id='identifier-description'>Identifier</h4>
+  <p>The <code>identifier</code> is the second part of the file name. It is defined via JSONata. It does not have to
+    be
+    defined.</p>
+  <h4 id='extension-description'>File extension</h4>
+  <p>The file <code>extension</code> can be selected via a dropdown menu. You can choose between json, html, xml, txt
+    and a
+    self-selectable extension.</p>
 </script>
 
 <script type='text/javascript' xmlns='http://www.w3.org/1999/html'>
   RED.nodes.registerType('Logger', {
-    category: 'Autexis',
+    category: 'autexis',
     color: '#5274cb',
     defaults: {
-      name: {value: ''},
+      name: { value: '' },
       logConfig: {
         value: '',
         type: 'LogConfig',
       },
-      debugWindow: {value: false},
-      console: {value: false},
-      logType: {value: ''},
-      logContent: {value: ''},
-      folder: {value: ''},
-      prefix: {value: ''},
-      identifier: {value: ''},
-      extension: {value: ''},
-      extensionHidden: {value: ''},
+      appendingToFile: {value:'true'},
+      appendNewline: {value:false},
+      debugWindow: { value: false },
+      console: { value: false },
+      logType: { value: '' },
+      logContent: { value: '' },
+      folder: { value: '' },
+      prefix: { value: '' },
+      identifier: { value: '' },
+      extension: { value: '' },
+      extensionHidden: { value: '' },
     },
     inputs: 1,
     outputs: 1,
@@ -175,6 +192,9 @@
       const completeFolder = $('#node-input-completeFolder');
       const inputFolder = $('#node-input-folder');
       const inputPrefix = $('#node-input-prefix');
+      const appendConfig = $('#node-input-appendConfig');
+      const action = $('#node-input-appendingToFile');
+
       //Load all extensions
       jqInputExtension.typedInput({
         types: [{
@@ -214,36 +234,45 @@
       //Load input Type for the identifier.
       jqInputIdentifier.typedInput({
         type: 'jsonata',
-      })
+      });
 
-      $('#node-input-folder,#node-input-prefix, #node-input-identifier, #node-input-extension').change(function () {
-        let extensionValue = jqInputExtensionHidden.val();
-        let folderValue = inputFolder.val();
-        let prefixValue = inputPrefix.val();
-        let identifierValue = jqInputIdentifier.val();
-        if (extensionValue !== '') {
-          if (extensionValue === 'str') {
-            if (jqInputExtension.val() !== '') {
-              extensionValue = `${jqInputExtension.val()}`;
-            } else {
-              extensionValue = '';
+      $('#node-input-folder,#node-input-prefix, #node-input-identifier, #node-input-extension')
+          .change(function () {
+            let extensionValue = jqInputExtensionHidden.val();
+            let folderValue = inputFolder.val();
+            let prefixValue = inputPrefix.val();
+            let identifierValue = jqInputIdentifier.val();
+            if (extensionValue !== '') {
+              if (extensionValue === 'str') {
+                if (jqInputExtension.val() !== '') {
+                  extensionValue = `${jqInputExtension.val()}`;
+                } else {
+                  extensionValue = '';
+                }
+              } else {
+                extensionValue = `${extensionValue}`;
+              }
             }
-          } else {
-            extensionValue = `${extensionValue}`;
-          }
-        }
-        if (prefixValue !== '') {
-          prefixValue = `${prefixValue}`;
+            if (prefixValue !== '') {
+              prefixValue = `${prefixValue}`;
+            } else {
+              prefixValue = '{prefix}';
+            }
+            if (identifierValue !== '') {
+              identifierValue = `${identifierValue}`;
+            } else {
+              identifierValue = '{identifier}';
+            }
+            completeFolder.text(`${folderValue}/${prefixValue}_${identifierValue}.${extensionValue}`);
+          });
+
+      action.change(function () {
+        if (this.value === 'true') {
+          appendConfig.slideDown();
         } else {
-          prefixValue = '{prefix}'
+          appendConfig.slideUp();
         }
-        if (identifierValue !== '') {
-          identifierValue = `${identifierValue}`;
-        } else {
-          identifierValue = '{identifier}';
-        }
-        completeFolder.text(`${folderValue}/${prefixValue}_${identifierValue}.${extensionValue}`);
-      })
+      });
 
     },
     oneditsave: function () {
