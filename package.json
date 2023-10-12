@@ -1,13 +1,15 @@
 {
   "name": "@autexis/node-red-payload-logger",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Node-RED Contribution to log data",
   "main": "index.js",
   "repository": "https://github.com/Autexis-IT/node-red-contrib-payload-logger",
   "author": "Autexis IT <info@autexis.com>",
   "license": "MIT",
   "private": false,
+  "keywords": [ "node-red" ],
   "node-red": {
+    "version": ">=2.0.0",
     "nodes": {
       "Logger": "nodes/logger/logger.js",
       "Config": "nodes/config/config.js"
