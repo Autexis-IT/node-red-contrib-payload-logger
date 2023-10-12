@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": "https://github.com/Autexis-IT/node-red-contrib-payload-logger",
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=16.0.0"
   },
   "author": "Autexis IT <info@autexis.com>",
   "license": "MIT",

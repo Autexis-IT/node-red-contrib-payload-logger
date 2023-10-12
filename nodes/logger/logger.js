@@ -1,11 +1,9 @@
+const util = require('util');
+const _ = require('lodash');
 const fs = require('fs-extra');
-const { id } = require('date-fns/locale');
-module.exports = function (RED) {
-  const util = require('util');
-  const _ = require('lodash');
-  const fs = require('fs-extra');
-  const path = require('path');
+const path = require('path');
 
+module.exports = function (RED) {
   function LoggerNode(config) {
     RED.nodes.createNode(this, config);
     const node = this;
