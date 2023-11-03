@@ -10,9 +10,16 @@
     <label for='node-input-logConfig'>Config</label>
     <input type='text' id='node-input-logConfig' style='display: inline-block; width: 70%; vertical-align: top;'/>
   </div>
+
+  <!-- Info Text -->
   <div class="form-row">
+    <p id="node-input-infoText" style="color: red; display: none;">Close and reopen Edit dialog.</p>
+  </div>
+
+  <!-- Action-->
+  <div class='form-row'>
     <label for="node-input-appendingToFile">Action</label>
-    <select type="text" id="node-input-appendingToFile" style="width: 250px;">
+    <select type="text" id="node-input-appendingToFile" style="width: 70%;">
       <option value=true>Append</option>
       <option value=false>new File</option>
     </select>
@@ -23,32 +30,29 @@
       <label for="node-input-appendNewline" style="width: 70%;">Add newline (\n) to each payload?</label>
     </div>
   </div>
-
-  <!-- Where payload is logged -->
-  <div class='form-row'>
-    <label><i class='fa fa-random'></i> Write To</label>
-    <div style="display: inline-block; width: 22px; vertical-align: top;">
-      <input type='checkbox' id='node-input-debugWindow'>
-    </div>
-    <label for='node-input-debugWindow' style='width: auto;'>debug window</label>
+  <!-- Filesize -->
+  <div class='form-row' id="node-input-filehandling">
+    <label for="node-input-filesize">Max. Filesize</label>
+    <input type="number" min="1" id="node-input-filesize" style="width: 30%;">
+    <select id="node-input-filesizeBytes" style="width: 15%;">
+      <option value="kb">KB</option>
+      <option value="mb">MB</option>
+      <option value="gb">GB</option>
+    </select>
   </div>
-  <div class='form-row'>
-    <label for='node-input-console'></label>
-    <div style="display: inline-block; width: 22px; vertical-align: top;">
-      <input type='checkbox' id='node-input-console'>
-    </div>
-    <label for='node-input-console' style='width: auto;'>system console</label>
-  </div>
-
-
   <!-- Log-Type -->
   <div class='form-row'>
-    <label for='node-input-logType' style='vertical-align: top;'>What should be logged</label>
-    <input type='text' id='node-input-logType' style='display: inline-block; width: 70%; vertical-align: top;'>
+    <label for='node-input-logType' style='vertical-align: top;'>Log Value</label>
+    <input type='text' id='node-input-logType'
+           style='display: inline-block; width:  70%; vertical-align: top;'>
     <input type='hidden' id='node-input-logContent'>
   </div>
+  <div class='form-row' style="margin-top: -20px;">
+    <label for='node-input-logType' style='vertical-align: top;'></label>
+    <a id="node-input-csvTemplate" style="font-size: smaller; color: cornflowerblue" target="_blank">Insert CSV
+      template </a>
+  </div>
 
-  <!-- Header -->
   <div class='form-row'>
     <label style='width: auto'>
       <b>Path creation</b>
@@ -70,7 +74,7 @@
     </div>
     <!-- Identifier -->
     <div class='form-row'>
-      <label for='node-input-identifier'>identifier </label>
+      <label for='node-input-identifier'>Identifier </label>
       <input type='text' id='node-input-identifier'
              style='display: inline-block; width:  70%; vertical-align: top;'>
     </div>
@@ -88,6 +92,17 @@
     </div>
   </div>
 
+  <!-- Where payload is logged -->
+  <div class='form-row'>
+    <label><i class='fa fa-random'></i> Write To</label>
+    <input type='checkbox' id='node-input-debugWindow' style='width: 50px; vertical-align: middle; margin: 0;'>
+    <label for='node-input-debugWindow' style='width: 100px; vertical-align: middle; margin: 0;'>debug window</label>
+    </br>
+    <label for='node-input-console'></label>
+    <input type='checkbox' id='node-input-console' style="width: 50px; vertical-align: middle; margin: 0;">
+    <label for='node-input-console' style='width: 100px; vertical-align: middle; margin: 0;'>system console</label>
+  </div>
+
 
 </script>
 <script type='text/html' data-help-name='Logger'>
@@ -96,8 +111,9 @@
   <h3>Inputs</h3>
   <dl class='message-properties'>
     <dt class='required'>payload<span class='property-type'>string/object</span></dt>
-    <dd>The payload is logged and stored in the file. Alternatively, the field <code>what should be logged</code>
-      can be used to define something other what should be logged.
+    <dd>The payload is logged and stored in the file. Alternatively, over the field <code>Log Value</code> it can be
+      defined something other to log with JSONata.
+
     </dd>
     <dt class='optional'>folder<span class='property-type'>string</span></dt>
     <a href='#folder-description'>
@@ -131,14 +147,35 @@
   <h4>Config</h4>
   <p>In the Config, logs are stored under a defined path in an archive folder and deleted when they reach a specific
     age.</p>
-  <h4 class='fa fa-random'> Write To</h4>
-  <p>The logged input can be written into the <code>debug window</code> as well as into the <code>system
-    console</code>.</p>
-  <h4>What should be logged</h4>
-  <p>Either the <code>payload</code> can be logged, or it is defined via JSONata what is to be logged.</p>
-  <h4><b>Variable Selection</b></h4>
+  <h4>Action</h4>
+  <p>The logged value can be written to a new file or appended to the existing file.</p>
+  <p>If <code>Append</code> is selected its possible to select that every payload is written to a new line</p>
+  <h4>Max. Filesize</h4>
+  <p>If <code>Append</code> is selected the maximum filesize can be set to KB, MB or GB.
+    When the file reaches the file size, a new file is created with the same name and an index number.</p>
+  <h4>Log Value</h4>
+  <p>Either the <code>payload</code> can be logged, or it is defined via JSONata another log value</p>
+  <p>When <code>Append</code> is selected its possible to add a CSV Template in the JSONata field.
+    The sample has a value for the timestamp, value and identifier. In the CSV file the headers are added to the first
+    line and all values are underneath like this:</p>
+  <code>timestamp;value;identifier</code>
+  <code>2023-10-31T07:57:53.070Z;testPayload;exampleIdentifier</code>
+  <p>When writing to an existing CSV file, it checks each time if the header is correct. If it is not, a new file with
+    the same name is created, with the Nodeid included in the file name.</p>
+  <h4>Path creation</h4>
   <p>The logged data is stored in a defined file in a specific folder. The structure looks like this:
-    <code>PAYLOAD_LOGS_PATH/{folder}/{prefix}_{identifier}_msgid.{extension}</code></p>
+    </br>
+    When new file is selected:
+    </br>
+    <code>PAYLOAD_LOGS_PATH/{folder}/{prefix}_{identifier}_msgid.{extension}</code>
+    </br>
+    When Append is selected:
+    </br>
+    <code>PAYLOAD_LOGS_PATH/{folder}/{prefix}_{identifier}{yyyy-MM-dd}.{extension}</code>
+    </br>
+    When a new file is created with the Nodeid:
+    <code>PAYLOAD_LOGS_PATH/{folder}/{prefix}_{identifier}{yyyy-MM-dd}_node-{Nodeid}.{extension}</code>
+  </p>
   <h4>PAYLOAD_LOGS_PATH</h4>
   <p>This is an Environment variable for the log folder. It can be defined in the <code>settings.js</code> file. If
     this variable is undefined the default value ist <code>./logs`</code></p>
@@ -147,13 +184,15 @@
   <h4 id='prefix-description'>Prefix</h4>
   <p>The <code>prefix</code> is the first part of the file name in which the logged data is stored.</p>
   <h4 id='identifier-description'>Identifier</h4>
-  <p>The <code>identifier</code> is the second part of the file name. It is defined via JSONata. It does not have to
-    be
+  <p>The <code>identifier</code> is the second part of the file name. It is defined via JSONata. The identifier is
+    not a required value.
     defined.</p>
   <h4 id='extension-description'>File extension</h4>
-  <p>The file <code>extension</code> can be selected via a dropdown menu. You can choose between json, html, xml, txt
-    and a
-    self-selectable extension.</p>
+  <p>The file <code>extension</code> can be selected via a dropdown menu. You can choose between json, html, xml, txt,
+    csv and self-selectable extension.</p>
+  <h4 class='fa fa-random'> Write To</h4>
+  <p>The logged input can be written into the <code>debug window</code> as well as into the <code>system
+    console</code>.</p>
 </script>
 
 <script type='text/javascript' xmlns='http://www.w3.org/1999/html'>
@@ -166,8 +205,10 @@
         value: '',
         type: 'LogConfig',
       },
-      appendingToFile: {value:'true'},
-      appendNewline: {value:false},
+      appendingToFile: { value: 'false' },
+      filesizeBytes: { value: 'mb' },
+      filesize: { value: 10 },
+      appendNewline: { value: false },
       debugWindow: { value: false },
       console: { value: false },
       logType: { value: '' },
@@ -189,11 +230,15 @@
       const jqInputExtensionHidden = $('#node-input-extensionHidden');
       const jqInputIdentifier = $('#node-input-identifier');
       const jqInputLogType = $('#node-input-logType');
+      const jqInputlogContent = $('#node-input-logContent');
       const completeFolder = $('#node-input-completeFolder');
       const inputFolder = $('#node-input-folder');
       const inputPrefix = $('#node-input-prefix');
       const appendConfig = $('#node-input-appendConfig');
-      const action = $('#node-input-appendingToFile');
+      const filehandling = $('#node-input-filehandling');
+      const appendingToFile = $('#node-input-appendingToFile');
+      const csvTemplate = $('#node-input-csvTemplate');
+      const infoText = $('#node-input-infoText');
 
       //Load all extensions
       jqInputExtension.typedInput({
@@ -209,7 +254,12 @@
           },
           {
             value: 'xml',
-            label: '.xml',
+            label: 'xml',
+            hasValue: false
+          },
+          {
+            value: 'csv',
+            label: 'csv',
             hasValue: false
           },
           {
@@ -225,10 +275,24 @@
         label: 'msg.payload',
         hasValue: false
       };
-// load Logging Types
+      // load Logging Types
       jqInputLogType.typedInput({
         types: [autoType, 'jsonata'],
-        typeField: $('#node-input-logContent')
+        typeField: jqInputlogContent
+      });
+
+      jqInputLogType.change(function () {
+        if (jqInputlogContent.val() === 'payload') {
+          csvTemplate.hide();
+        } else {
+          csvTemplate.show();
+        }
+      });
+      csvTemplate.on('click', () => {
+
+        const newValue = '{\t   "timestamp": $now(),\t   "value": payload,\t   "identifier": identifier\t}';
+        jqInputLogType.val(newValue);
+        infoText.show();
       });
 
       //Load input Type for the identifier.
@@ -266,11 +330,18 @@
             completeFolder.text(`${folderValue}/${prefixValue}_${identifierValue}.${extensionValue}`);
           });
 
-      action.change(function () {
+      appendingToFile.change(function () {
+        console.log();
         if (this.value === 'true') {
-          appendConfig.slideDown();
+          appendConfig.show();
+          if (jqInputlogContent.val() === 'jsonata') {
+            csvTemplate.show();
+          }
+          filehandling.show();
         } else {
-          appendConfig.slideUp();
+          appendConfig.hide();
+          csvTemplate.hide();
+          filehandling.hide();
         }
       });
 
