@@ -45,15 +45,21 @@ Individual paths can be defined for the different log data. This makes the logs 
 
 In Config, log paths can be defined in which old files are archived or deleted.
 
-#### Write To
+#### Action
 
-The logged Data can be written to the debug window or to the system console
+The logged value can be written to a new file or appended to the existing file.   
+If `Append` is selected its possible to select that every payload is written to a new line
 
-#### What should be logged
+#### Max. Filesize
+
+If `Append` is selected the maximum filesize can be set to KB, MB or GB. When the file reaches the file size, a new file
+is created with the same name and an index number.
+
+#### Log Value
 
 Either the payload can be logged or it is defined via JSONata what is to be logged.
 
-### Variable Selection
+### Path Creation
 
 There are some Configuration for this Payload-Logger. Either the configs can be made with the editor dialogue or the
 configs are sent with the msg object.
@@ -65,7 +71,12 @@ These are the Configurations:
 - extension
 
 The logged data is stored in a defined file in a specific folder. The structure looks like this:
-`PAYLOAD_LOGS_PATH/{Folder}/{prefix}_{identifier}.{extension}`
+When new file is selected:  
+`PAYLOAD_LOGS_PATH/{folder}/{prefix}_{identifier}_msgid.{extension}`
+When Append is selected:  
+`PAYLOAD_LOGS_PATH/{folder}/{prefix}_{identifier}{yyyy-MM-dd}.{extension}`  
+When a new file is created with the Nodeid:   
+`PAYLOAD_LOGS_PATH/{folder}/{prefix}_{identifier}{yyyy-MM-dd}_node-{Nodeid}.{extension}`
 
 #### PAYLOAD_LOGS_PATH
 
@@ -86,8 +97,12 @@ The identifier is the second part of the file name. It is defined via JSONata. I
 
 #### File extension
 
-The file extension can be selected via a dropdown menu. You can choose between json, html, xml, txt and a
+The file extension can be selected via a dropdown menu. You can choose between json, html, xml, txt, csv and
 self-selectable extension.
+
+#### Write To
+
+The logged Data can be written to the debug window or to the system console
 
 ## Config
 
@@ -131,5 +146,7 @@ Add Debug mode in Config to write messages to the debug window.
 
 ## References
 
-- The way the data is written to the files is inspired by [Node-RED Core Node "write file"](https://github.com/node-red/node-red/blob/master/packages/node_modules/%40node-red/nodes/core/storage/10-file.js)
-- The dynamic Setting in the Config node is inspired by [Node-RED modbus Flex-Sequencer](https://github.com/BiancoRoyal/node-red-contrib-modbus/blob/master/src/modbus-flex-sequencer.html)
+- The way the data is written to the files is inspired
+  by [Node-RED Core Node "write file"](https://github.com/node-red/node-red/blob/master/packages/node_modules/%40node-red/nodes/core/storage/10-file.js)
+- The dynamic Setting in the Config node is inspired
+  by [Node-RED modbus Flex-Sequencer](https://github.com/BiancoRoyal/node-red-contrib-modbus/blob/master/src/modbus-flex-sequencer.html)
