@@ -1,6 +1,6 @@
 {
   "name": "@autexis/node-red-payload-logger",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Node-RED Contribution to log data",
   "main": "index.js",
   "repository": "https://github.com/Autexis-IT/node-red-contrib-payload-logger",
