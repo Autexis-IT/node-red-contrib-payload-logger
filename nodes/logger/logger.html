@@ -152,7 +152,7 @@
   <p>If <code>Append</code> is selected its possible to select that every payload is written to a new line</p>
   <h4>Max. Filesize</h4>
   <p>If <code>Append</code> is selected the maximum filesize can be set to KB, MB or GB.
-    When the file reaches the file size, a new file is created with the same name and an index number.</p>
+    When the file reaches the file size, the file becomes renamed with an index and a new file is created.</p>
   <h4>Log Value</h4>
   <p>Either the <code>payload</code> can be logged, or it is defined via JSONata another log value</p>
   <p>When <code>Append</code> is selected its possible to add a CSV Template in the JSONata field.
@@ -167,7 +167,7 @@
     </br>
     When new file is selected:
     </br>
-    <code>PAYLOAD_LOGS_PATH/{folder}/{prefix}_{identifier}_msgid.{extension}</code>
+    <code>PAYLOAD_LOGS_PATH/{folder}/{prefix}_{identifier}_{msgid}.{extension}</code>
     </br>
     When Append is selected:
     </br>

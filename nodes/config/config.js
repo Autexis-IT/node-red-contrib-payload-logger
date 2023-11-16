@@ -4,6 +4,7 @@ const dateFns = require('date-fns');
 const path = require('path');
 const AdmZip = require('adm-zip');
 
+// eslint-disable-next-line func-names
 module.exports = function (RED) {
   function ConfigNode(n) {
     RED.nodes.createNode(this, n);
@@ -154,23 +155,25 @@ module.exports = function (RED) {
 
           // get all the files and directories in srcPath
           debug(`get all the files and directories from ${srcPath}`);
-          let entries = await fs.readdir(srcPath, { withFileTypes: true });
+          const entries = await fs.readdir(srcPath, { withFileTypes: true });
           // filter and sort files that has to be archived
           const dirs = entries.filter((dirPath) => dirPath.isDirectory())
             .map((dirent) => dirent.name);
-          let files = entries.filter((dirPath) => dirPath.isFile())
+          const files = entries.filter((dirPath) => dirPath.isFile())
             .map((dirent) => dirent.name);
           totalFileCounter += files.length;
           debug('filter and sort files that has to be archived');
-          let filesToArchive = [];
+          const filesToArchive = [];
           for (let i = files.length - 1; i >= 0; i -= 1) {
             // check if the file is outdated
             const file = files[i];
             const filePath = path.join(srcPath, file);
             try {
+              // eslint-disable-next-line no-await-in-loop
               const stat = await fs.stat(path.resolve(filePath));
               if (!stat.size) {
                 node.warn(`[dirCrawler - processFile] Got empty file! Deleting file ${filePath} ..`);
+                // eslint-disable-next-line no-await-in-loop
                 await deleteFiles([filePath]);
                 node.warn('[dirCrawler - processFile]    .. deleted.');
               } else if (new Date(stat.mtimeMs) < dateToArchive) {
@@ -204,6 +207,7 @@ module.exports = function (RED) {
 
               // create new archive
               try {
+                // eslint-disable-next-line no-await-in-loop
                 zip = await createNewArchive(srcPath, zipName);
                 debug(`====== ${zip.name}`);
               } catch (err) {
@@ -221,6 +225,7 @@ module.exports = function (RED) {
 
               // try to write zip
               try {
+                // eslint-disable-next-line no-await-in-loop
                 await zip.zipper.writeZipPromise(zip.name);
               } catch (err) {
                 // reset filesToDelete to prevent deletion after zip writing failed
@@ -231,6 +236,7 @@ module.exports = function (RED) {
               totalArchivedFileCounter += filesToDelete.length;
 
               // delete zipped files
+              // eslint-disable-next-line no-await-in-loop
               await deleteFiles(filesToDelete);
               debug(`(${new Date().toISOString()}) Batch proceed`);
             } while (offset < filesToArchive.length);
@@ -240,11 +246,6 @@ module.exports = function (RED) {
           // eslint-disable-next-line max-len
           const message = `${dirs.length ? `dir ${path.join(srcPath, dirs.toString())}` : `end of dir ${srcPath}`} ${filesToArchive.length} files to process and ${filecounter} outdated files`;
           node.log(message);
-
-          // leave garbage in old space
-          entries = undefined;
-          files = undefined;
-          filesToArchive = undefined;
 
           return dirs;
         } catch (err) {
@@ -276,6 +277,7 @@ module.exports = function (RED) {
               try {
                 if (dateToDelete !== undefined) {
                   if (archiveDate < dateToDelete) {
+                    // eslint-disable-next-line no-await-in-loop
                     await fs.rm(path.resolve(path.join(archivePath, archiveName)), {
                       force: true,
                       recursive: true,
@@ -304,6 +306,7 @@ module.exports = function (RED) {
           try {
             debug(`Pending dirs: ${JSON.stringify(pendingDirs)}`);
             const currentDir = pendingDirs.pop();
+            // eslint-disable-next-line no-await-in-loop
             const newPaths = await dirCrawler(currentDir);
             debug(`New Paths: ${JSON.stringify(newPaths)}`);
             for (let i = newPaths.length - 1; i >= 0; i -= 1) {

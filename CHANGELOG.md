@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Configuration
 ### Added
 - Append function to add multiple logs to one file. Special handling for csv and json.
+- .nvmrc-file for nodejs version
+- minimum nodejs version to package.json
+- minimum node-red version to package.json
 ### Changed
 - Updated node example
 ### Fixed

@@ -4,6 +4,7 @@ const fs = require('fs/promises');
 const path = require('path');
 const format = require('date-fns/format');
 
+// eslint-disable-next-line func-names
 module.exports = function (RED) {
   function LoggerNode(config) {
     this.filePath = '';
@@ -344,7 +345,6 @@ module.exports = function (RED) {
           try {
             const expr = RED.util.prepareJSONataExpression(config.logType, node);
             logText = RED.util.evaluateJSONataExpression(expr, msg);
-            node.warn(logText);
             if (appendingToFile === 'true') {
               await append(dir, logText, extension);
             } else {

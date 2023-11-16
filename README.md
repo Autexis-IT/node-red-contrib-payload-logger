@@ -52,8 +52,8 @@ If `Append` is selected its possible to select that every payload is written to 
 
 #### Max. Filesize
 
-If `Append` is selected the maximum filesize can be set to KB, MB or GB. When the file reaches the file size, a new file
-is created with the same name and an index number.
+If `Append` is selected the maximum filesize can be set to KB, MB or GB. When the file reaches the file size, the file
+becomes renamed with an index and a new file is created.
 
 #### Log Value
 
@@ -71,10 +71,13 @@ These are the Configurations:
 - extension
 
 The logged data is stored in a defined file in a specific folder. The structure looks like this:
-When new file is selected:  
-`PAYLOAD_LOGS_PATH/{folder}/{prefix}_{identifier}_msgid.{extension}`
-When Append is selected:  
+
+When "New file" is selected:  
+`PAYLOAD_LOGS_PATH/{folder}/{prefix}_{identifier}_{msgid}.{extension}`
+
+When "Append" is selected:  
 `PAYLOAD_LOGS_PATH/{folder}/{prefix}_{identifier}{yyyy-MM-dd}.{extension}`  
+
 When a new file is created with the Nodeid:   
 `PAYLOAD_LOGS_PATH/{folder}/{prefix}_{identifier}{yyyy-MM-dd}_node-{Nodeid}.{extension}`
 
