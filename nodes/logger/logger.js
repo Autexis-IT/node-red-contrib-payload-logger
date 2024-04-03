@@ -54,11 +54,19 @@ module.exports = function (RED) {
           break;
       }
 
+      const evaluateJSONataExpression = async (jsonataString, msg, RED) => new Promise((resolve, reject) => {
+        const expr = RED.util.prepareJSONataExpression(jsonataString, this);
+        RED.util.evaluateJSONataExpression(expr, msg, (error, result) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(result);
+        });
+      });
+
       // reading JSONata
       const identifierPath = config.identifier || msg.identifier || 'empty';
-      const preparedEditExpression = RED.util.prepareJSONataExpression(identifierPath, this);
-      const identifier = RED.util.evaluateJSONataExpression(preparedEditExpression, msg);
-
+      const identifier = await evaluateJSONataExpression(identifierPath, msg, RED);
       function debug(message) {
         const debugmessage = {
           id: node.id,
@@ -163,6 +171,7 @@ module.exports = function (RED) {
           highestNumberFile,
         };
       };
+
       const creatingFileName = async (dir) => {
         let index;
         if (await getfileSize(dir) >= bytes) {
@@ -343,8 +352,7 @@ module.exports = function (RED) {
           }
         } else {
           try {
-            const expr = RED.util.prepareJSONataExpression(config.logType, node);
-            logText = RED.util.evaluateJSONataExpression(expr, msg);
+            logText = await evaluateJSONataExpression(config.logType, msg, RED);
             if (appendingToFile === 'true') {
               await append(dir, logText, extension);
             } else {
