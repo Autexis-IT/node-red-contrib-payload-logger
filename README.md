@@ -1,3 +1,8 @@
+# ARCHIVED -> MOVED TO GITLAB
+
+Hi, nice to see you here, but.. We moved this repo to [Gitlab.com](https://gitlab.com/autexis/oss/packages/node-red-contrib-payload-logger).
+Hope to meet you there again 🦊
+
 # Node-RED Payload-Logger
 
 The Payload-Logger is a help in analysing data when, for example, an error has to be found.
